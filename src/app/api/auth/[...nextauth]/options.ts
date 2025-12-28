@@ -8,8 +8,8 @@ import UserModel from "@/model/User";
 export const authOptions: NextAuthConfig = {
    providers: [
       Credentials({
-         id: "domain-login",
-         name: "Domain Account",
+         id: "credentials",
+         name: "Credentials",
          credentials: {
             username: { label: "Username", type: "text", placeholder: "jsmith" }, // mistake
             password: { label: "Password", type: "password" }
