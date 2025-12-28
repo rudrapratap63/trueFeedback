@@ -1,9 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-import z, { success } from "zod";
+import z from "zod";
 import { usernameValidation } from "@/schemas/signUpSchema";
-import { id } from "zod/locales";
-
 
 const UsernameQuerySchema = z.object({
    username: usernameValidation
