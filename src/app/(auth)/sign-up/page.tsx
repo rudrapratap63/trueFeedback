@@ -1,7 +1,8 @@
 'use client'
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import {z} from "zod"
+import { z } from "zod"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useDebounceCallback } from 'usehooks-ts'
@@ -23,8 +24,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Loader2 } from "lucide-react"
 
-
-
 const SignUp = () => {
   const [username, setUsername] = useState('');
   const [usernameMesssage, setUsernameMessage] = useState('')
@@ -44,9 +43,9 @@ const SignUp = () => {
     }
   })
 
-  useEffect(()=>{
-    const checkUsernameUnique = async() => {
-      if(username){
+  useEffect(() => {
+    const checkUsernameUnique = async () => {
+      if (username) {
         setIsCheckingUsername(true)
         setUsernameMessage("")
         try {
@@ -55,7 +54,7 @@ const SignUp = () => {
         } catch (error) {
           const axiosError = error as AxiosError<ApiResponse>
           setUsernameMessage(axiosError.response?.data.message ?? "Error checking username")
-        }finally{
+        } finally {
           setIsCheckingUsername(false)
         }
       }
@@ -78,22 +77,27 @@ const SignUp = () => {
         description: errorMessage
       })
 
-    }finally{
+    } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-slate-950 text-white relative overflow-hidden font-sans">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-indigo-500/10 blur-[120px]" />
+        <div className="absolute top-[20%] -right-[10%] w-[30%] h-[30%] rounded-full bg-purple-500/10 blur-[120px]" />
+      </div>
+
+      <div className="z-10 w-full max-w-md p-8 space-y-8 bg-slate-900/50 border border-slate-800 backdrop-blur-xl rounded-2xl shadow-2xl">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">
             Join True Feedback
           </h1>
-          <p className="mb-4">Sign up to start your anonymous adventure</p>
+          <p className="mb-4 text-slate-400 leading-relaxed">Sign up to start your anonymous adventure</p>
         </div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} 
+          <form onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6"
           >
             <FormField
@@ -101,25 +105,30 @@ const SignUp = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="text-slate-300">Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="username"
-                     {...field}
-                     onChange={(e) => {
-                      field.onChange(e)
-                      debounced(e.target.value)
-                     }}
+                    <Input
+                      placeholder="username"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        debounced(e.target.value)
+                      }}
+                      className="bg-slate-950 border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20 text-white transition-all placeholder:text-slate-500"
                     />
                   </FormControl>
-                  { isCheckingUsername && 
-                    <Loader2 className="animate-spin" />
-                  }
-                  <p className={`text-sm ${usernameMesssage === "Username available"
-                    ? 'text-green-500' : 'text-red-500'}`}
-                    >
-                    test {usernameMesssage}
-                  </p>
-                  <FormMessage />
+                  
+                  <div className="flex items-center gap-2 mt-2 min-h-[20px]">
+                    {isCheckingUsername && <Loader2 className="animate-spin h-4 w-4 text-slate-400" />}
+                    {!isCheckingUsername && usernameMesssage && (
+                       <p className={`text-sm ${usernameMesssage === "Username available"
+                       ? 'text-green-400' : 'text-red-400'}`}
+                       >
+                       {usernameMesssage}
+                     </p>
+                    )}
+                  </div>
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -128,11 +137,15 @@ const SignUp = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-slate-300">Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" {...field} />
+                    <Input 
+                      placeholder="email@example.com" 
+                      {...field} 
+                      className="bg-slate-950 border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20 text-white transition-all placeholder:text-slate-500"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -141,30 +154,39 @@ const SignUp = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-slate-300">Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
+                    <Input 
+                      type="password" 
+                      placeholder="••••••••" 
+                      {...field} 
+                      className="bg-slate-950 border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20 text-white transition-all placeholder:text-slate-500"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting} >
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-6 transition-all duration-300 shadow-lg shadow-indigo-500/20 disabled:bg-indigo-600/50 disabled:text-slate-300"
+            >
               {
                 isSubmitting ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin "/>
-                     Please Wait
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin " />
+                    Please Wait
                   </>
-                ) : ('Signup')
+                ) : ('Sign Up')
               }
             </Button>
           </form>
         </Form>
-        <div className="text-center mt-4">
+        <div className="text-center mt-6 text-slate-400 text-sm">
           <p>
             Already a member?{' '}
-            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+            <Link href="/sign-in" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
               Sign in
             </Link>
           </p>
